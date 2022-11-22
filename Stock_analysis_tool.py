@@ -13,7 +13,7 @@ import os
 #collections.Callable = collections.abc.Callable
 
 class stock:
-    def __init__(self,keyword, csvfile='stocks.csv', mode = "scraping_mode"):
+    def __init__(self,keyword,plot = False, csvfile='stocks.csv', mode = "scraping_mode"):
         print('Processing for stock: ' + keyword + ' .....')
         self.symbol = ""
         self.avg_pe = 35
@@ -28,6 +28,8 @@ class stock:
             
         self.yahoo = yf.Ticker(self.symbol) 
         self.hist = self.yahoo.history(period="1y")
+        if(plot == True):
+            self.get_plot()
         #self.__stock_prediction()
         #self.__get_ratings()
         #self.__get_target_price()
@@ -241,6 +243,7 @@ class stock:
                         self.Low = float(sets[2])
  
         out.close()  
+        os.remove("target.txt")
 
     def __stock_prediction(self):
 
@@ -320,7 +323,6 @@ class stock:
         return "" ''' 
 
     def get_plot(self, *args):
-        print(type(args))
         if len(args) == 0:
             span = '1y'
         else:
@@ -372,8 +374,8 @@ def get_all_symbols():
 
     
 
-def scrape_function(keywordlist = ['intc'],csv_file = 'stocks.csv'):
-    keyword_list=['cost']#'apple','msft','amzn','alphabet','tsla']
+def scrape_function(keywordlist = [],plotlist = [],csv_file = 'stocks.csv'):
+    keyword_list=['AAPL','MSFT','AMZN','GOOG','TSLA']
     for items in keywordlist:
         if items not in keyword_list:
             keyword_list.append(items)
@@ -384,11 +386,15 @@ def scrape_function(keywordlist = ['intc'],csv_file = 'stocks.csv'):
         dictwriter_object.writeheader()
         f_object.close()
 
+    
+
     for keyword in keyword_list:
         Stock = stock(keyword = keyword)
         
         print(Stock)
 
+    for plot in plotlist:
+        stock(plot).get_plot()
 
 def static_function(path='stocks.csv'):
     fieldnames = ['Name','Symbol', 'Price', 'Market Cap', 'EPS Trailing', 'EPS Forward', 'Change', 'Change%', 'Prev Close', 'Volume', 'Year Low', 'Year High', 'P/E Trailing', 'P/E Forward', 'Dividend', 'Dividend Yield', 'Target High', 'Target Avg', 'Target Low']
@@ -417,7 +423,23 @@ if __name__=='__main__':
         default_function()
 
     elif sys.argv[1] == '--scrape':
-        scrape_function()
+        if len(sys.argv) > 2:
+            keywords = list()
+            plots = list()
+            plotparam = False            
+            for i in range(2,len(sys.argv)):
+                if(sys.argv[i] == '--plot'):
+                    plotparam = True
+                    continue
+                
+                if(plotparam == False):
+                    keywords.append(sys.argv[i])
+                else:
+                    plots.append(sys.argv[i])
+                
+            scrape_function(keywords,plots)
+        else:
+            scrape_function()
     
     elif  sys.argv[1] == '--static':
         if len(sys.argv) == 3:
