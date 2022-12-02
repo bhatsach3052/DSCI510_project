@@ -1,5 +1,6 @@
 # DSCI510_project
 
+GitHub Link: https://github.com/bhatsach3052/DSCI510_project/ 
 This project is the development of a tool that performs stock analysis and prediction on Nasdaq’s top 100 stocks. 
 First, the project involves fetching data from the web for current stock parameters, and the use of yahoo finance API for fetching the history of the stock prices. With the use of the data collected, it is analyzed, and a prediction is made based on various parameters like current stock price, Revenue and growth projections from recent quarterly results, latest market trend, company financials, etc. The tool will provide the trend of the stock based on different timelines (Yearly, quarterly, monthly, and weekly). Based on these values, along with an estimation of stock value, a suggestion is made to the user based on the current value of the stock. This prediction is compared with the analysis made by other top stock analysts which is fetched from a market analysis website to weigh the accuracy of the tool.
 ## Sources
@@ -28,7 +29,7 @@ simplejson==3.17.6
 urllib3==1.26.12
 yahoo-finance==1.4.0
 yfinance==0.1.85
-bs4
+beautifulsoup4==4.10.0
 
 
 ### Default Mode
@@ -38,9 +39,9 @@ Format:
 
 ### Scrape Mode
 This mode runs the analysis of stocks passed in the arguments while running this tool. The arguments can be symbols or the name of the stock in any format (case insensitive) along with the top 5 stocks of Nasdaq-100. If no argument is passed, only the top 5 stocks are analyzed, and a prediction is made. We can plot the market trend of the stocks by using --plot as an argument and name the stocks which we need to plot after this argument
-> python Stock_analysis_tool.py --scrape intel qualcomm TSLA
+> python Stock_analysis_tool.py --scrape intel Qualcomm TSLA
 > python Stock_analysis_tool.py --scrape
-> python Stock_analysis_tool.py --scrape --plot apple nvidia
+> python Stock_analysis_tool.py --scrape --plot apple Nvidia
 
 ### Static Mode
 This mode runs the tool with the path of an excel file as input. This mode doesn’t fetch the data from the web. It retrieves the already-fetched data in the form of an excel file. This tool fetched the data from the stocks.csv file by default if no argument is passed
@@ -51,7 +52,7 @@ This mode runs the tool with the path of an excel file as input. This mode doesn
 This tool is currently implemented to fetch data on Nasdaq-100 stocks. This can be extended to support stocks listed in  S&P500, NYSE, Dow Jones, or any other stock exchange. All these changes can be supported with minor adjustments in the code since most of the APIs are abstracted and scalable to all kinds of stocks irrespective of the stock exchange they are listed in.
 
 ## Limitation of the tool
-This tool is still not completely susceptible to stock input which is not listed in the market.  The tool might crash for invalid input in the excel file. There may be a bad request error from websites rarely. This is taken care of by using the headers to set the user agents and resolve the issue.
+This tool is still not completely susceptible to stock input which is not listed in the market.  The tool might crash for invalid input in the excel file. There may be a bad request error from websites rarely. This is taken care of by using the headers to set the user agents and resolve the issue. These are a few points that limit my code.
 ## Time taken to process the inputs
 The speed of the tool mainly depends on your network speed since most of the time is taken to fetch the data from multiple HTTP requests. On average, it takes around 3 seconds to perform analysis on a stock and around 5 seconds to plot the market data of 1 year if you run in scrape mode. For default mode, since there are 102 stocks, it takes around 4-5 minutes to complete the processing of all these stocks. In static mode, since the data is already fetched for us, it takes less than a second to process a particular stock. The time taken to complete analysis on all the stock takes less than 30 seconds in static mode
 
